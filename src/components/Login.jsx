@@ -1,19 +1,51 @@
-import React from 'react';
-import '../styles/styles.css'; // Import your CSS
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import '../styles/styles.css'; // Ensure this is the correct path
+import '../styles/mediaQuery.css'; // Ensure this is the correct path
 
 const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('/api/login', { email, password });
+            if (response.data.success) {
+                console.log('Login successful:', response.data);
+                navigate('/'); // Redirect to home on success
+            } else {
+                console.error('Login failed:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
+    };
+
     return (
-        <div className="login-container">
+        <div className="auth-container">
             <h2>Login</h2>
-            <form>
-                <div className="mb-3">
-                    <input type="email" className="form-control" placeholder="Enter E-mail" />
-                </div>
-                <div className="mb-3">
-                    <input type="password" className="form-control" placeholder="Enter Password" />
-                </div>
-                <button type="submit" className="btn btn-primary">Login</button>
+            <form onSubmit={onSubmit}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
+                <button type="submit">Login</button>
             </form>
+            <p>Do you already have an account?</p>
+            <button className="redirect-btn" onClick={() => navigate('/signup')}>Create account</button>
         </div>
     );
 };

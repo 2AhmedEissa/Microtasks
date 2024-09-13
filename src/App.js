@@ -1,25 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import MainContent from './components/MainContent';
-import Tasks from './components/Tasks';
-import Login from './components/Login';
-import Signup from './components/SignUp';
-import ContactSection from './components/ContactSection';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Tasks from "./components/Tasks";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import Navbar from "./components/Navbar";
 
-function App() {
+const App = () => {
   return (
-    <Router basename="/Microtasks">
+    <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<MainContent />} />
-        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/tasks" element={<Tasks />} />
       </Routes>
-      <ContactSection />
     </Router>
   );
-}
+};
 
 export default App;

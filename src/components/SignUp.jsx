@@ -1,24 +1,53 @@
-import React from 'react';
-import '../styles/styles.css'; // Import your CSS
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import '../styles/styles.css'; // Ensure this is the correct path
+import '../styles/mediaQuery.css'; // Ensure this is the correct path
 
-const Signup = () => {
+const SignUp = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('/api/signup', { email, password });
+            if (response.data.success) {
+                console.log('Signup successful:', response.data);
+                navigate('/login'); // Redirect to login on success
+            } else {
+                console.error('Signup failed:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error signing up:', error);
+        }
+    };
+
     return (
-        <div className="signup-container">
+        <div className="auth-container">
             <h2>Sign Up</h2>
-            <form>
-                <div className="mb-3">
-                    <input type="text" className="form-control" placeholder="Enter Name" />
-                </div>
-                <div className="mb-3">
-                    <input type="email" className="form-control" placeholder="Enter E-mail" />
-                </div>
-                <div className="mb-3">
-                    <input type="password" className="form-control" placeholder="Enter Password" />
-                </div>
-                <button type="submit" className="btn btn-primary">Sign Up</button>
+            <form onSubmit={onSubmit}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
+                <button type="submit">Sign Up</button>
             </form>
+            <p>Do you already have an account?</p>
+            <button className="redirect-btn" onClick={() => navigate('/login')}>Login</button>
         </div>
     );
 };
 
-export default Signup;
+export default SignUp;
